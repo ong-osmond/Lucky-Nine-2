@@ -9,11 +9,18 @@ $(document).ready(function () {
     var eventContainer = $(".event-container");
     // Adding event listeners for deleting, editing, and adding events
     $(document).on("click", "button.delete", deleteEvent);
-    $(document).on("click", "button.complete", toggleComplete);
-    $(document).on("click", ".event-item", editEvent);
-    $(document).on("keyup", ".event-item", finishEdit);
-    $(document).on("blur", ".event-item", cancelEdit);
+    $(document).on("click", "button.join", joinEvent);
+    //$(document).on("click", ".event-item", editEvent);
+    //$(document).on("keyup", ".event-item", finishEdit);
+    //$(document).on("blur", ".event-item", cancelEdit);
     $(document).on("submit", "#event-form", insertEvent);
+
+    // Callback function to retrieve the current IP
+    function getJoinEventID() {
+        $.getJSON("http://jsonip.com/?callback=?", function (data) {
+            return data.ip;
+        });
+    }
 
     // Our initial events array
     var events = [];
@@ -61,11 +68,36 @@ $(document).ready(function () {
     }
 
     // Toggles complete status
-    function toggleComplete(event) {
+    function joinEvent(event) {
         event.stopPropagation();
+        var joinEventID = "";
         var event = $(this).parent().data("event");
-        event.complete = !event.complete;
-        updateEvent(event);
+        for (i = 0; i < event.Event_Participants.length; i++) {
+            var eventParticipants = [];
+            eventParticipants.push(event.Event_Participants[i].participant_id);
+        }
+        console.log("Event Participants:" + eventParticipants);
+        $.getJSON("http://jsonip.com/?callback=?", function (data) {
+            joinEventID = data.ip;
+        }).then(function () {
+            if (eventParticipants === undefined) {
+                var event_participant = {
+                    event_id: event.id,
+                    participant_id: joinEventID
+                };
+                console.log(event_participant);
+                $.post("/api/event_participant", event_participant, getEvents);
+            }
+            else if (!eventParticipants.includes(joinEventID)) {
+                var event_participant = {
+                    event_id: event.id,
+                    participant_id: joinEventID
+                };
+                console.log(event_participant);
+                $.post("/api/event_participant", event_participant, getEvents);
+            } else alert("You have already signed up for this event!");
+
+        })
     }
 
     // This function starts updating a event in the database if a user hits the "Enter Key"
@@ -79,11 +111,11 @@ $(document).ready(function () {
         }
     }
 
-    // This function updates a event in our database
+    // This function updates an event in our database
     function updateEvent(event) {
         $.ajax({
             method: "PUT",
-            url: "/api/events",
+            url: "/api/event",
             data: event
         }).then(getEvents);
     }
@@ -108,10 +140,10 @@ $(document).ready(function () {
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0'+minutes : minutes;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
         var strTime = hours + ':' + minutes + ' ' + ampm;
         return strTime;
-      }
+    }
 
 
     // This function constructs a event-item row
@@ -126,6 +158,7 @@ $(document).ready(function () {
           <br> Venue: ${event.venue}
           <br> Local Date and Time: ${localEventDateTime}
           <br> Category: ${event.category}
+          <br> Number of participants: ${event.Event_Participants.length}
           </span>
           <br> 
           <input type='text' class='edit' style='display: none;'>
@@ -157,4 +190,5 @@ $(document).ready(function () {
         console.log(event);
         $.post("/api/event", event, getEvents);
     }
+
 });
