@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Event - Express</title>
+    <!-- Latest compiled and minified CSS & JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/lumen/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/styles.css" media="screen" title="no title">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <ul class="list-group event-list">
+                    <li class="list-group-item new-item">
+                        <form id="event-form">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <input class="new-event-title form-control" placeholder="Event Title"
+                                            type="text" />
+                                        <input class="new-event-description form-control"
+                                            placeholder="Describe your event" type="text" />
+                                        <input class="new-event-venue form-control"
+                                            placeholder="Venue (Enter City or Suburb to help the Google Maps Search)"
+                                            type="text" />
+                                        <select class="new-event-category form-control">
+                                            <option value="">--Please choose a category--</option>
+                                            <option value="Cleanup">Cleanup</option>
+                                            <option value="Recycling">Recycling</option>
+                                            <option value="Tree Planting">Tree Planting</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        <form action="/action_page.php">
+                                            <label for="new-event-dateTime">Local Date and Time:</label>
+                                            <input type="datetime-local" class="new-event-dateTime"
+                                                name="new-event-dateTime">
+                                        </form>
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="submit" class="btn btn-success">Add Event</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <span class="event-container">
+                    </span>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Custom Script -->
+    <script src="js/view.js" type="text/javascript"></script>
+
+</body>
+
+</html>
