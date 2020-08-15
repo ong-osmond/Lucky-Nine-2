@@ -67,7 +67,7 @@ $(document).ready(function () {
         $(this).children("input.edit").focus();
     }
 
-    // Toggles complete status
+    // Adds the current user as a participant to the event
     function joinEvent(event) {
         event.stopPropagation();
         var joinEventID = "";
@@ -159,6 +159,7 @@ $(document).ready(function () {
           <br> Local Date and Time: ${localEventDateTime}
           <br> Category: ${event.category}
           <br> Number of participants: ${event.Event_Participants.length}
+          <br> Created by: ${event.createdBy}
           </span>
           <br> 
           <input type='text' class='edit' style='display: none;'>
@@ -180,15 +181,21 @@ $(document).ready(function () {
     // This function inserts a new event into our database and then updates the view
     function insertEvent(event) {
         event.preventDefault();
-        var event = {
-            title: $newEventTitle.val(),
-            description: $newEventDesription.val(),
-            venue: $newEventVenue.val(),
-            category: $newEventCategory.val(),
-            dateTime: $newEventDateTime.val()
-        };
-        console.log(event);
-        $.post("/api/event", event, getEvents);
+        var joinEventID = "";
+        $.getJSON("http://jsonip.com/?callback=?", function (data) {
+            joinEventID = data.ip;
+        }).then(function () {
+            var event = {
+                title: $newEventTitle.val(),
+                description: $newEventDesription.val(),
+                venue: $newEventVenue.val(),
+                category: $newEventCategory.val(),
+                dateTime: $newEventDateTime.val(),
+                createdBy: joinEventID
+            };
+            console.log(event);
+            $.post("/api/event", event, getEvents);
+        })
     }
 
 });

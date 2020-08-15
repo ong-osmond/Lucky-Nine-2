@@ -73,6 +73,7 @@ module.exports = function (app) {
       category: req.body.category,
       venue: req.body.venue,
       dateTime: req.body.dateTime,
+      createdBy: req.body.createdBy
     }).then(function (event) {
       res.json(event);
     });

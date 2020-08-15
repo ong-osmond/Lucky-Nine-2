@@ -28,6 +28,10 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: Sequelize.NOW
+        },
+        createdBy: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
     });
     return Event;
