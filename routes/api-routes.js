@@ -2,7 +2,9 @@
 const db = require("../models");
 const passport = require("../config/passport");
 
-module.exports = function(app) {
+
+
+module.exports = function (app) {
   // Using the passport.authenticate middleware with our local strategy.
   // If the user has valid login credentials, send them to the members page.
   // Otherwise the user will be sent an error
@@ -50,4 +52,53 @@ module.exports = function(app) {
       });
     }
   });
+
+  // Route for getting all events
+  app.get("/api/events", function (req, res) {
+    // Joining Event table to Event_Participant table
+    let eventParticipantTable = db.Event_Participant;
+    let eventTable = db.Event;
+    eventTable.hasMany(eventParticipantTable, { foreignKey: 'event_id' });
+    eventParticipantTable.belongsTo(eventTable, { foreignKey: 'id' });
+    eventTable.findAll({ include: [eventParticipantTable] }).then(function (results) {
+      res.json(results);
+    });
+  });
+
+  // Route for adding event
+  app.post("/api/event", function (req, res) {
+    db.Event.create({
+      title: req.body.title,
+      description: req.body.description,
+      category: req.body.category,
+      venue: req.body.venue,
+      dateTime: req.body.dateTime,
+      createdBy: req.body.createdBy
+    }).then(function (event) {
+      res.json(event);
+    });
+  });
+
+  //Route for deleting event
+  app.delete("/api/event/:id", function (req, res) {
+    db.Event.destroy({
+      where: {
+        id: req.params.id
+      }
+    }).then(function (event) {
+      res.json(event);
+    });
+
+  });
+
+  // Route for adding event_participant
+  app.post("/api/event_participant", function (req, res) {
+    db.Event_Participant.create({
+      event_id: req.body.event_id,
+      participant_id: req.body.participant_id
+    }).then(function (event) {
+      res.json(event);
+    });
+  });
+
 };
