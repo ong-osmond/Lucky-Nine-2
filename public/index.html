@@ -13,14 +13,17 @@
 
 <body>
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginButton">
         Log in
-      </button>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal">
+    </button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal" id="signUpButton">
         Sign up
-      </button>
+    </button>
+    <button type="button" class="btn btn-primary" id="logoutButton" style="display: none;">
+        Log out
+    </button>
 
-      
+
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
@@ -67,98 +70,120 @@
     <!-- Login Modal -->
     <div class="modal" tabindex="-1" role="dialog" id="loginModal">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Log in</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <div class="row">
-                      <div class="col-md-6 col-md-offset-3">
-                        <h2>Login Form</h2>
-                        <form class="login">
-                          <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="email-input" placeholder="Email">
-                          </div>
-                          <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="password-input" placeholder="Password">
-                          </div>
-                          <button type="submit" class="btn btn-default">Login</button>
-                        </form>
-                        <br />
-                        <p>Or sign up <a href="/">here</a></p>
-                      </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Log in</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <h2>Login Form</h2>
+                                <form class="login">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email address</label>
+                                        <input type="email" class="form-control" id="login-email-input"
+                                            placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Password</label>
+                                        <input type="password" class="form-control" id="login-password-input"
+                                            placeholder="Password">
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Login</button>
+                                </form>
+                                <br />
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary">Save changes</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
         </div>
-      </div>
-    
-      <!-- Sign up modal -->
+    </div>
 
-      <div class="modal" tabindex="-1" role="dialog" id="signupModal">
+    <!-- Sign up modal -->
+
+    <div class="modal" tabindex="-1" role="dialog" id="signupModal">
         <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Sign Up</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sign Up</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <h2>Sign Up Form</h2>
+                                <form class="signup">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email address</label>
+                                        <input type="email" class="form-control" id="signup-email-input"
+                                            placeholder="Email">
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label for="exampleInputFirstName">First Name</label>
+                                        <input type="firstName" class="form-control" id="signup-firstName-input"
+                                            placeholder="First Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputLastName">Last Name</label>
+                                        <input type="lastName" class="form-control" id="signup-lastName-input"
+                                            placeholder="Last Name"> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Password</label>
+                                        <input type="password" class="form-control" id="signup-password-input"
+                                            placeholder="Password">
+                                    </div>
+                                    <div style="display: none" id="alert" class="alert alert-danger" role="alert">
+                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        <span class="sr-only">Error:</span> <span class="msg"></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Sign Up</button>
+                                </form>
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-body">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 col-md-offset-3">
-            <h2>Sign Up Form</h2>
-            <form class="signup">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="email-input" placeholder="Email">
-              </div>
-              <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="password-input" placeholder="Password">
-              </div>
-              <div style="display: none" id="alert" class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                <span class="sr-only">Error:</span> <span class="msg"></span>
-              </div>
-              <button type="submit" class="btn btn-default">Sign Up</button>
-            </form>
-            <br />
-            <p>Or log in <a href="/login">here</a></p>
-          </div>
         </div>
-      </div>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary">Save changes</button>
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    </div>
-  </div>
-</div>
-</div>
 
 
 
     <!-- Custom Script -->
     <script src="js/view.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/signup.js"></script>
     <script>
         $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
-      })
+            $('#myInput').trigger('focus')
+        })
+        $('#logoutButton').on('click', function () {
+            console.log("Logout button clicked");
+            $.get("logout", function (data) {
+                let userData = {};
+                $("#loginButton").show();
+                $("#signUpButton").show();
+                $("#logoutButton").hide();
+            }
+            )
+        })
     </script>
-    
+
 
 </body>
 

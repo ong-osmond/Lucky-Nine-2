@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     // Getting a reference to the input field where user adds a new event
     var $newEventTitle = $(".new-event-title");
     var $newEventDesription = $(".new-event-description");
@@ -148,6 +149,7 @@ $(document).ready(function () {
 
     // This function constructs a event-item row
     function createNewRow(event) {
+        console.log(event);
         var localEventDateTime = formatAMPM(event.dateTime);
         var newInputRow = $(
             [
@@ -159,7 +161,7 @@ $(document).ready(function () {
           <br> Local Date and Time: ${localEventDateTime}
           <br> Category: ${event.category}
           <br> Number of participants: ${event.Event_Participants.length}
-          <br> Created by: ${event.createdBy}
+          <br> Created by user id: ${event.createdBy}
           </span>
           <br> 
           <input type='text' class='edit' style='display: none;'>
@@ -181,20 +183,28 @@ $(document).ready(function () {
     // This function inserts a new event into our database and then updates the view
     function insertEvent(event) {
         event.preventDefault();
-        var joinEventID = "";
-        $.getJSON("http://jsonip.com/?callback=?", function (data) {
-            joinEventID = data.ip;
-        }).then(function () {
-            var event = {
-                title: $newEventTitle.val(),
-                description: $newEventDesription.val(),
-                venue: $newEventVenue.val(),
-                category: $newEventCategory.val(),
-                dateTime: $newEventDateTime.val(),
-                createdBy: joinEventID
-            };
-            console.log(event);
-            $.post("/api/event", event, getEvents);
+        // Retrieve the credentials of the user
+        $.get("/api/user_data", function (data) {
+            let userData = data;
+            console.log(userData)
+            if (userData.email !== undefined) {
+                var event = {
+                    title: $newEventTitle.val(),
+                    description: $newEventDesription.val(),
+                    venue: $newEventVenue.val(),
+                    category: $newEventCategory.val(),
+                    dateTime: $newEventDateTime.val(),
+                    createdBy: userData.id
+                };
+                console.log(event);
+                $.post("/api/event", event, getEvents);
+                // var event_participant = {
+                //     event_id: event.id,
+                //     participant_id: userData.id
+                // };
+                // console.log(event_participant);
+                // $.post("/api/event_participant", event_participant, getEvents);
+            } else alert("You need to log in to add an event");
         })
     }
 
