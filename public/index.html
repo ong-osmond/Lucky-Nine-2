@@ -12,6 +12,10 @@
 </head>
 
 <body>
+    <header>
+        <h1 id="userName">Hello, Username!</h1>
+    </header>
+
 
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginButton">
         Log in
@@ -33,13 +37,9 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-10">
-                                        <input class="new-event-title form-control" placeholder="Event Title"
-                                            type="text" />
-                                        <input class="new-event-description form-control"
-                                            placeholder="Describe your event" type="text" />
-                                        <input class="new-event-venue form-control"
-                                            placeholder="Venue (Enter City or Suburb to help the Google Maps Search)"
-                                            type="text" />
+                                        <input class="new-event-title form-control" placeholder="Event Title" type="text" />
+                                        <input class="new-event-description form-control" placeholder="Describe your event" type="text" />
+                                        <input class="new-event-venue form-control" placeholder="Venue (Enter City or Suburb to help the Google Maps Search)" type="text" />
                                         <select class="new-event-category form-control">
                                             <option value="">--Please choose a category--</option>
                                             <option value="Cleanup">Cleanup</option>
@@ -49,8 +49,7 @@
                                         </select>
                                         <form action="/action_page.php">
                                             <label for="new-event-dateTime">Local Date and Time:</label>
-                                            <input type="datetime-local" class="new-event-dateTime"
-                                                name="new-event-dateTime">
+                                            <input type="datetime-local" class="new-event-dateTime" name="new-event-dateTime">
                                         </form>
                                     </div>
                                     <div class="col-2">
@@ -85,13 +84,11 @@
                                 <form class="login">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>
-                                        <input type="email" class="form-control" id="login-email-input"
-                                            placeholder="Email">
+                                        <input type="email" class="form-control" id="login-email-input" placeholder="Email">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Password</label>
-                                        <input type="password" class="form-control" id="login-password-input"
-                                            placeholder="Password">
+                                        <input type="password" class="form-control" id="login-password-input" placeholder="Password">
                                     </div>
                                     <button type="submit" class="btn btn-default">Login</button>
                                 </form>
@@ -126,8 +123,7 @@
                                 <form class="signup">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>
-                                        <input type="email" class="form-control" id="signup-email-input"
-                                            placeholder="Email">
+                                        <input type="email" class="form-control" id="signup-email-input" placeholder="Email">
                                     </div>
                                     <!-- <div class="form-group">
                                         <label for="exampleInputFirstName">First Name</label>
@@ -138,28 +134,27 @@
                                         <label for="exampleInputLastName">Last Name</label>
                                         <input type="lastName" class="form-control" id="signup-lastName-input"
                                             placeholder="Last Name"> -->
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Password</label>
-                                        <input type="password" class="form-control" id="signup-password-input"
-                                            placeholder="Password">
-                                    </div>
-                                    <div style="display: none" id="alert" class="alert alert-danger" role="alert">
-                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                        <span class="sr-only">Error:</span> <span class="msg"></span>
-                                    </div>
-                                    <button type="submit" class="btn btn-default">Sign Up</button>
-                                </form>
-                                <br />
                             </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" class="form-control" id="signup-password-input" placeholder="Password">
+                            </div>
+                            <div style="display: none" id="alert" class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span class="sr-only">Error:</span> <span class="msg"></span>
+                            </div>
+                            <button type="submit" class="btn btn-default">Sign Up</button>
+                            </form>
+                            <br />
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
+    </div>
     </div>
 
 
@@ -169,18 +164,19 @@
     <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript" src="js/signup.js"></script>
     <script>
-        $('#myModal').on('shown.bs.modal', function () {
+        $('#myModal').on('shown.bs.modal', function() {
             $('#myInput').trigger('focus')
         })
-        $('#logoutButton').on('click', function () {
+        $('#logoutButton').on('click', function() {
             console.log("Logout button clicked");
-            $.get("logout", function (data) {
+            $.get("logout", function(data) {
                 let userData = {};
+                localStorage.clear();
                 $("#loginButton").show();
                 $("#signUpButton").show();
                 $("#logoutButton").hide();
-            }
-            )
+                $("#userName").hide();
+            })
         })
     </script>
 
