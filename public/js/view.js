@@ -1,4 +1,7 @@
-$(document).ready(function () {
+/*jshint esversion: 6 */
+$(document).ready(function() {
+
+    displayItemsWhenLoggedIn();
 
     // Getting a reference to the input field where user adds a new event
     var $newEventTitle = $(".new-event-title");
@@ -18,7 +21,7 @@ $(document).ready(function () {
 
     // Callback function to retrieve the current IP
     function getJoinEventID() {
-        $.getJSON("http://jsonip.com/?callback=?", function (data) {
+        $.getJSON("http://jsonip.com/?callback=?", function(data) {
             return data.ip;
         });
     }
@@ -28,6 +31,19 @@ $(document).ready(function () {
 
     // Getting events from database when page loads
     getEvents();
+
+    // This function checks if the user is already logged in and displays the appropriate elements
+    function displayItemsWhenLoggedIn() {
+        if (localStorage.loggedInData) {
+            let loggedInData = JSON.parse(localStorage.loggedInData);
+            let userId = (loggedInData.user);
+            $("#userName").text(`Hello, user ID: ${userId}`)
+            $("#userName").show();
+            $("#loginButton").hide();
+            $("#signUpButton").hide();
+            $("#logoutButton").show();
+        }
+    }
 
     // This function resets the events displayed with new events from the database
     function initializeRows() {
@@ -41,7 +57,7 @@ $(document).ready(function () {
 
     // This function grabs events from the database and updates the view
     function getEvents() {
-        $.get("/api/events", function (data) {
+        $.get("/api/events", function(data) {
             events = data;
             console.log(events);
             initializeRows();
@@ -78,9 +94,9 @@ $(document).ready(function () {
             eventParticipants.push(event.Event_Participants[i].participant_id);
         }
         console.log("Event Participants:" + eventParticipants);
-        $.getJSON("http://jsonip.com/?callback=?", function (data) {
+        $.getJSON("http://jsonip.com/?callback=?", function(data) {
             joinEventID = data.ip;
-        }).then(function () {
+        }).then(function() {
             if (eventParticipants === undefined) {
                 var event_participant = {
                     event_id: event.id,
@@ -88,8 +104,7 @@ $(document).ready(function () {
                 };
                 console.log(event_participant);
                 $.post("/api/event_participant", event_participant, getEvents);
-            }
-            else if (!eventParticipants.includes(joinEventID)) {
+            } else if (!eventParticipants.includes(joinEventID)) {
                 var event_participant = {
                     event_id: event.id,
                     participant_id: joinEventID
@@ -184,7 +199,7 @@ $(document).ready(function () {
     function insertEvent(event) {
         event.preventDefault();
         // Retrieve the credentials of the user
-        $.get("/api/user_data", function (data) {
+        $.get("/api/user_data", function(data) {
             let userData = data;
             console.log(userData)
             if (userData.email !== undefined) {
