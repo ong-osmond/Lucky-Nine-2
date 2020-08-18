@@ -32,6 +32,9 @@ module.exports = function(sequelize, DataTypes) {
         createdBy: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        timestamp: {
+            type: DataTypes.DATE
         }
     });
     return Event;
