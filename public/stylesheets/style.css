@@ -40,12 +40,26 @@ body {
 }
 
 /*Main Page Overlay*/
-.overlay { 
+#maintitle { 
   color:#fff;
   position:absolute;
   z-index:12;
-  top:50%;
+  margin-top:20%;
   left:0;
   width:100%;
   text-align:center;
+}
+
+#mainblurb { 
+  color:#fff;
+  position:absolute;
+  z-index:12;
+  margin-top:25%;
+  left:0;
+  width:100%;
+  text-align:center;
+}
+
+.nav-item {
+  margin-left: 5%;
 }
