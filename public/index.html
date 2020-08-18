@@ -26,6 +26,12 @@
     <button type="button" class="btn btn-primary" id="logoutButton" style="display: none;">
         Log out
     </button>
+    <button type="button" class="btn btn-primary" id="myEventsButton" style="display: none;">
+        My Events
+    </button>
+    <button type="button" class="btn btn-primary" id="allEventsButton" style="display: none;">
+        All Events
+    </button>
 
 
     <div class="container">
@@ -166,17 +172,6 @@
     <script>
         $('#myModal').on('shown.bs.modal', function() {
             $('#myInput').trigger('focus')
-        })
-        $('#logoutButton').on('click', function() {
-            console.log("Logout button clicked");
-            $.get("logout", function(data) {
-                let userData = {};
-                localStorage.clear();
-                $("#loginButton").show();
-                $("#signUpButton").show();
-                $("#logoutButton").hide();
-                $("#userName").hide();
-            })
         })
     </script>
 

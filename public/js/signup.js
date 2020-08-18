@@ -46,6 +46,7 @@ $(document).ready(() => {
                     $("#signupModal").modal('hide');
                     $("#userName").text(`Hello, user ID: ${userId}`)
                     $("#userName").show();
+                    $("#myEventsButton").show();
                     $("#loginButton").hide();
                     $("#signUpButton").hide();
                     $("#logoutButton").show();

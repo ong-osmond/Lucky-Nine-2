@@ -1,14 +1,14 @@
 /*jshint esversion: 6 */
 $(document).ready(function() {
 
-    displayItemsWhenLoggedIn();
-
     // Getting a reference to the input field where user adds a new event
     var $newEventTitle = $(".new-event-title");
     var $newEventDesription = $(".new-event-description");
     var $newEventVenue = $(".new-event-venue");
     var $newEventCategory = $(".new-event-category");
     var $newEventDateTime = $(".new-event-dateTime");
+    $("#myEventsButton").on("click", getMyEvents);
+    $("#allEventsButton").on("click", getEvents);
     // Our new events will go inside the eventContainer
     var eventContainer = $(".event-container");
     // Adding event listeners for deleting, editing, and adding events
@@ -30,7 +30,7 @@ $(document).ready(function() {
     var events = [];
 
     // Getting events from database when page loads
-    getEvents();
+    // getEvents();
 
     // This function checks if the user is already logged in and displays the appropriate elements
     function displayItemsWhenLoggedIn() {
@@ -42,6 +42,8 @@ $(document).ready(function() {
             $("#loginButton").hide();
             $("#signUpButton").hide();
             $("#logoutButton").show();
+            $("#myEventsButton").show();
+            $("#allEventsButton").show();
         }
     }
 
@@ -64,6 +66,18 @@ $(document).ready(function() {
         });
     }
 
+    // This function grabs the user's events
+    function getMyEvents() {
+        let loggedInData = JSON.parse(localStorage.loggedInData);
+        let userId = (loggedInData.user);
+        console.log(`Sending this api route request for myEvents : /api/myEvents/${userId}`);
+        $.get(`/api/myEvents/${userId}`, function(data) {
+            events = data;
+            initializeRows();
+        });
+    }
+
+
     // This function deletes a event when the user clicks the delete button
     function deleteEvent(event) {
         event.stopPropagation();
@@ -72,7 +86,7 @@ $(document).ready(function() {
         $.ajax({
             method: "DELETE",
             url: "/api/event/" + id
-        }).then(getEvents);
+        }).then(getMyEvents);
     }
 
     // This function handles showing the input box for a user to edit a event
@@ -86,66 +100,18 @@ $(document).ready(function() {
 
     // Adds the current user as a participant to the event
     function joinEvent(event) {
-        event.stopPropagation();
-        var joinEventID = "";
-        var event = $(this).parent().data("event");
-        for (i = 0; i < event.Event_Participants.length; i++) {
-            var eventParticipants = [];
-            eventParticipants.push(event.Event_Participants[i].participant_id);
-        }
-        console.log("Event Participants:" + eventParticipants);
-        $.getJSON("http://jsonip.com/?callback=?", function(data) {
-            joinEventID = data.ip;
-        }).then(function() {
-            if (eventParticipants === undefined) {
-                var event_participant = {
-                    event_id: event.id,
-                    participant_id: joinEventID
-                };
-                console.log(event_participant);
-                $.post("/api/event_participant", event_participant, getEvents);
-            } else if (!eventParticipants.includes(joinEventID)) {
-                var event_participant = {
-                    event_id: event.id,
-                    participant_id: joinEventID
-                };
-                console.log(event_participant);
-                $.post("/api/event_participant", event_participant, getEvents);
-            } else alert("You have already signed up for this event!");
-
-        })
-    }
-
-    // This function starts updating a event in the database if a user hits the "Enter Key"
-    // While in edit mode
-    function finishEdit(event) {
-        var updatedEvent = $(this).data("event");
-        if (event.which === 13) {
-            updatedEvent.text = $(this).children("input").val().trim();
-            $(this).blur();
-            updateEvent(updatedEvent);
-        }
-    }
-
-    // This function updates an event in our database
-    function updateEvent(event) {
-        $.ajax({
-            method: "PUT",
-            url: "/api/event",
-            data: event
-        }).then(getEvents);
-    }
-
-    // This function is called whenever a event item is in edit mode and loses focus
-    // This cancels any edits being made
-    function cancelEdit() {
-        var currentEvent = $(this).data("event");
-        if (currentEvent) {
-            $(this).children().hide();
-            $(this).children("input.edit").val(currentEvent.text);
-            $(this).children("span").show();
-            $(this).children("button").show();
-        }
+        event.preventDefault();
+        if (localStorage.loggedInData) {
+            event.stopPropagation();
+            let loggedInData = JSON.parse(localStorage.loggedInData);
+            let userId = (loggedInData.user);
+            let eventToJoin = $(this).parent().data("event");
+            var event_participant = {
+                event_id: eventToJoin.id,
+                participant_id: userId
+            };
+            $.post("/api/event_participant", event_participant, getMyEvents);
+        } else { alert("Please log in or sign up to join an event!"); }
     }
 
     // This function formats the date and time to AM/PM format
@@ -164,7 +130,6 @@ $(document).ready(function() {
 
     // This function constructs a event-item row
     function createNewRow(event) {
-        console.log(event);
         var localEventDateTime = formatAMPM(event.dateTime);
         var newInputRow = $(
             [
@@ -181,13 +146,47 @@ $(document).ready(function() {
           <br> 
           <input type='text' class='edit' style='display: none;'>
           <button class='join btn btn-primary'>Join!</button>
-          <button class='delete btn btn-danger'>x</button>
+          <button class='delete btn btn-danger'>Delete Event</button>
           </li>`
             ].join("")
         );
-
         newInputRow.find("button.delete").data("id", event.id);
         newInputRow.find("input.edit").css("display", "none");
+        // Check if Delete button is accessible
+        if (localStorage.loggedInData) {
+            let loggedInData = JSON.parse(localStorage.loggedInData);
+            let userId = (loggedInData.user);
+            if (userId == event.createdBy) {
+                newInputRow.find("button.delete").show();
+            } else {
+                newInputRow.find("button.delete").hide()
+            };
+        } else {
+            newInputRow.find("button.delete").hide()
+        }
+        // Check if Join button is accessible
+        if (localStorage.loggedInData) {
+            let loggedInData = JSON.parse(localStorage.loggedInData);
+            let userId = (loggedInData.user);
+            // Check if user is a participant
+            let eventToJoin = event;
+            for (i = 0; i < event.Event_Participants.length; i++) {
+                var eventParticipants = [];
+                eventParticipants.push(parseInt(eventToJoin.Event_Participants[i].participant_id));
+                if (eventParticipants === undefined ||
+                    !eventParticipants.includes(userId) ||
+                    userId != eventToJoin.createdBy) {
+                    newInputRow.find("button.join").show();
+                } else {
+                    newInputRow.find("button.join").hide();
+                }
+                if (userId == event.createdBy || eventParticipants.includes(userId)) {
+                    newInputRow.find("button.join").hide();
+                };
+            }
+        } else {
+            newInputRow.find("button.join").show();
+        }
         newInputRow.data("event", event);
         if (event.complete) {
             newInputRow.find("span").css("text-decoration", "line-through");
@@ -199,28 +198,88 @@ $(document).ready(function() {
     function insertEvent(event) {
         event.preventDefault();
         // Retrieve the credentials of the user
-        $.get("/api/user_data", function(data) {
-            let userData = data;
-            console.log(userData)
-            if (userData.email !== undefined) {
-                var event = {
-                    title: $newEventTitle.val(),
-                    description: $newEventDesription.val(),
-                    venue: $newEventVenue.val(),
-                    category: $newEventCategory.val(),
-                    dateTime: $newEventDateTime.val(),
-                    createdBy: userData.id
-                };
-                console.log(event);
-                $.post("/api/event", event, getEvents);
-                // var event_participant = {
-                //     event_id: event.id,
-                //     participant_id: userData.id
-                // };
-                // console.log(event_participant);
-                // $.post("/api/event_participant", event_participant, getEvents);
-            } else alert("You need to log in to add an event");
-        })
+        if (localStorage.loggedInData) {
+            let loggedInData = JSON.parse(localStorage.loggedInData);
+            let userId = (loggedInData.user);
+            var event = {
+                title: $newEventTitle.val(),
+                description: $newEventDesription.val(),
+                venue: $newEventVenue.val(),
+                category: $newEventCategory.val(),
+                dateTime: $newEventDateTime.val(),
+                createdBy: userId
+            };
+            $.post("/api/event", event, getMyEvents);
+        } else { alert("Please log in or sign up to add an event!"); }
     }
+
+    getEvents();
+    displayItemsWhenLoggedIn();
+
+    // Getting references to our form and inputs
+    const loginForm = $("form.login");
+    const emailInput = $("input#login-email-input");
+    const passwordInput = $("input#login-password-input");
+
+    // When the form is submitted, we validate there's an email and password entered
+    loginForm.on("submit", event => {
+        event.preventDefault();
+        const userData = {
+            email: emailInput.val().trim(),
+            password: passwordInput.val().trim()
+        };
+        console.log(userData);
+
+        if (!userData.email || !userData.password) {
+            return;
+        }
+
+        // If we have an email and password we run the loginUser function and clear the form
+        loginUser(userData.email, userData.password);
+        emailInput.val("");
+        passwordInput.val("");
+    });
+
+    // Log in the user
+    function loginUser(email, password) {
+        $.post("/api/login", {
+                email: email,
+                password: password
+            })
+            .then((userData) => {
+                let loggedInData = { user: userData.id, timestamp: Date.now() };
+                loggedInData = JSON.stringify(loggedInData);
+                localStorage.setItem('loggedInData', loggedInData);
+                loggedInData = JSON.parse(localStorage.loggedInData);
+                let userId = (loggedInData.user);
+                $("#loginModal").modal('hide');
+                $("#userName").text(`
+                                Hello, user ID: $ { userId }
+                                `)
+                $("#userName").show();
+                $("#myEventsButton").show();
+                $("#allEventsButton").show();
+                $("#loginButton").hide();
+                $("#signUpButton").hide();
+                $("#logoutButton").show();
+                getMyEvents();
+            })
+    }
+
+    // Log out the user
+    $('#logoutButton').on('click', function() {
+        let userData = {};
+        localStorage.clear();
+        $.get("logout", function(data) {
+            $("#loginButton").show();
+            $("#signUpButton").show();
+            $("#logoutButton").hide();
+            $("#userName").hide();
+            $("#myEventsButton").hide();
+            $("#allEventsButton").hide();
+        });
+        getEvents();
+    })
+
 
 });
