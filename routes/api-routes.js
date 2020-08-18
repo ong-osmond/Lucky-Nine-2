@@ -63,6 +63,18 @@ module.exports = function(app) {
         });
     });
 
+    // Route for getting user's events
+    app.get("/api/myEvents/:id", function(req, res) {
+        // Joining Event table to Event_Participant table
+        let eventParticipantTable = db.Event_Participant;
+        let eventTable = db.Event;
+        eventTable.hasMany(eventParticipantTable, { foreignKey: 'event_id' });
+        eventParticipantTable.belongsTo(eventTable, { foreignKey: 'id' });
+        eventTable.findAll({ where: { createdBy: req.params.id }, include: [eventParticipantTable] }).then(function(results) {
+            res.json(results);
+        });
+    });
+
     // Route for adding event
     app.post("/api/event", function(req, res) {
         db.Event.create({
