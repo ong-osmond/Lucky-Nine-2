@@ -38,3 +38,14 @@ body {
       background: #1A4668;
   }
 }
+
+/*Main Page Overlay*/
+.overlay { 
+  color:#fff;
+  position:absolute;
+  z-index:12;
+  top:50%;
+  left:0;
+  width:100%;
+  text-align:center;
+}
