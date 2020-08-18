@@ -13,18 +13,46 @@
 </head>
 
 <body>
-    <header>
-        <h1 id="userName">Hello, Username!</h1>
-    </header>
 
-    <div class="container">
-        <div class="row pt-1 pb-1">
-            <div class="col-lg-12">
-                <h4 class="text-center">ECO-MEETUP-Do you like to search up for an event</h4>
-                <h6 class="text-center">Slide through the images</h6>
-            </div>
+    <!---Add NAVBAR-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a id="userName" class="navbar-brand" href="#">Hello, Username!</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+
+                <!--Login-->
+                <li class="nav-item active">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal"
+                        id="loginButton">
+                        Log in
+                    </button>
+                </li>
+
+                <!--Signup-->
+                <li class="nav-item active">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal"
+                        id="signUpButton">
+                        Sign up
+                    </button>
+                </li>
+
+                <!--Logout-->
+                <li>
+                    <button type="button" class="btn btn-primary" id="logoutButton" style="display: none;">
+                        Log out
+                    </button>
+                </li>
+
+            </ul>
         </div>
-    </div>
+    </nav>
+
+    <!--MODAL SECTION-->
     <section>
         <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
             <div class="carousel-inner">
@@ -56,7 +84,7 @@
                     <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <input type="text" class="form-control search-slt" placeholder="Enter your subhurb">
+                                <input type="text" class="form-control search-slt" placeholder="Enter your Suburb">
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                                 <input type="text" class="form-control search-slt" placeholder="Enter an Event">
@@ -81,8 +109,8 @@
             </form>
         </div>
     </section>
-    
 
+    
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="loginButton">
         Log in
     </button>
@@ -100,6 +128,7 @@
     </button>
 
 
+    <!--Create Event-->
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
@@ -109,9 +138,13 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-10">
-                                        <input class="new-event-title form-control" placeholder="Event Title" type="text" />
-                                        <input class="new-event-description form-control" placeholder="Describe your event" type="text" />
-                                        <input class="new-event-venue form-control" placeholder="Venue (Enter City or Suburb to help the Google Maps Search)" type="text" />
+                                        <input class="new-event-title form-control" placeholder="Event Title"
+                                            type="text" />
+                                        <input class="new-event-description form-control"
+                                            placeholder="Describe your event" type="text" />
+                                        <input class="new-event-venue form-control"
+                                            placeholder="Venue (Enter City or Suburb to help the Google Maps Search)"
+                                            type="text" />
                                         <select class="new-event-category form-control">
                                             <option value="">--Please choose a category--</option>
                                             <option value="Cleanup">Cleanup</option>
@@ -121,7 +154,8 @@
                                         </select>
                                         <form action="/action_page.php">
                                             <label for="new-event-dateTime">Local Date and Time:</label>
-                                            <input type="datetime-local" class="new-event-dateTime" name="new-event-dateTime">
+                                            <input type="datetime-local" class="new-event-dateTime"
+                                                name="new-event-dateTime">
                                         </form>
                                     </div>
                                     <div class="col-2">
@@ -156,11 +190,13 @@
                                 <form class="login">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>
-                                        <input type="email" class="form-control" id="login-email-input" placeholder="Email">
+                                        <input type="email" class="form-control" id="login-email-input"
+                                            placeholder="Email">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Password</label>
-                                        <input type="password" class="form-control" id="login-password-input" placeholder="Password">
+                                        <input type="password" class="form-control" id="login-password-input"
+                                            placeholder="Password">
                                     </div>
                                     <button type="submit" class="btn btn-default">Login</button>
                                 </form>
@@ -195,7 +231,8 @@
                                 <form class="signup">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>
-                                        <input type="email" class="form-control" id="signup-email-input" placeholder="Email">
+                                        <input type="email" class="form-control" id="signup-email-input"
+                                            placeholder="Email">
                                     </div>
                                     <!-- <div class="form-group">
                                         <label for="exampleInputFirstName">First Name</label>
@@ -209,7 +246,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="signup-password-input" placeholder="Password">
+                                <input type="password" class="form-control" id="signup-password-input"
+                                    placeholder="Password">
                             </div>
                             <div style="display: none" id="alert" class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -236,8 +274,19 @@
     <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript" src="js/signup.js"></script>
     <script>
-        $('#myModal').on('shown.bs.modal', function() {
+        $('#myModal').on('shown.bs.modal', function () {
             $('#myInput').trigger('focus')
+        })
+        $('#logoutButton').on('click', function () {
+            console.log("Logout button clicked");
+            $.get("logout", function (data) {
+                let userData = {};
+                localStorage.clear();
+                $("#loginButton").show();
+                $("#signUpButton").show();
+                $("#logoutButton").hide();
+                $("#userName").hide();
+            })
         })
     </script>
 
