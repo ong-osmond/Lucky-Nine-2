@@ -98,7 +98,6 @@ module.exports = function(app) {
         }).then(function(event) {
             res.json(event);
         });
-
     });
 
     // Route for adding event_participant
