@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Event - Express</title>
+    <title>EcoMeetup - Find Eco Events Near You!</title>
     <!-- Latest compiled and minified CSS & JS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/lumen/bootstrap.min.css" />
     <link href="stylesheets/style.css" rel="stylesheet">
@@ -46,22 +46,6 @@
                         Log out
                     </button>
                 </li>
-
-                <!--My Events-->
-                <li>
-                    <button type="button" class="btn btn-primary" id="myEventsButton" style="display: none;">
-                        My Events
-                    </button>
-                </li>
-
-                <!--All Events-->
-
-                <li>
-                    <button type="button" class="btn btn-primary" id="allEventsButton" style="display: none;">
-                        All Events
-                    </button>
-                </li>
-
             </ul>
         </div>
     </nav>
@@ -92,39 +76,22 @@
     </section>
 
     <!--Search Section-->
-    <section class="search-sec">
+    <section class="search-section">
         <div class="container">
-            <form action="#" method="post" novalidate="novalidate">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <input type="text" class="form-control search-slt" placeholder="Enter your Suburb">
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <input type="text" class="form-control search-slt" placeholder="Enter an Event">
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <select class="form-control search-slt" id="exampleFormControlSelect1">
-                                    <option>Select Event</option>
-                                    <option>Event 1</option>
-                                    <option>Event 2</option>
-                                    <option>Event 3</option>
-                                    <option>Event 4</option>
-                                    <option>Event 5</option>
-                                    <option>Event 6</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <button type="button" class="btn btn-danger wrn-btn">Search</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <form>
+                <i class="fas fa-search"></i>
+                <input type="search" id="searchTerm" placeholder="Enter city or suburb">
+                <input type="submit" value="Search" id="searchButton" class="btn btn-success">
+                <button type="button" class="btn btn-success" id="myEventsButton" style="display: none;">
+                    My Events
+                </button>
+                <button type="button" class="btn btn-success" id="allEventsButton" style="display: none;">
+                    All Events
+                </button>
             </form>
         </div>
     </section>
-    
+
     <!--Create Event-->
     <div class="container">
         <div class="row">
@@ -140,8 +107,7 @@
                                         <input class="new-event-description form-control"
                                             placeholder="Describe your event" type="text" />
                                         <input class="new-event-venue form-control"
-                                            placeholder="Venue (Enter City or Suburb to help the Google Maps Search)"
-                                            type="text" />
+                                            placeholder="Venue (please include the city or suburb)" type="text" />
                                         <select class="new-event-category form-control">
                                             <option value="">--Please choose a category--</option>
                                             <option value="Cleanup">Cleanup</option>
@@ -244,8 +210,8 @@
                                     </div>
                                     <button type="submit" class="btn btn-default">Sign Up</button>
                                 </form>
-                                    
-                                    <!-- <div class="form-group">
+
+                                <!-- <div class="form-group">
                                         <label for="exampleInputFirstName">First Name</label>
                                         <input type="firstName" class="form-control" id="signup-firstName-input"
                                             placeholder="First Name">
@@ -256,16 +222,16 @@
                                             placeholder="Last Name"> 
                                     </div>    
                                         -->
-                            <br />
+                                <br />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 
 
@@ -289,6 +255,7 @@
                 $("#userName").hide();
             })
         })
+
     </script>
 
 
