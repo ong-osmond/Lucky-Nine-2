@@ -110,7 +110,7 @@ $(document).ready(function () {
                 event_id: eventToJoin.id,
                 participant_id: userId
             };
-            $.post("/api/event_participant", event_participant, getMyEvents);
+            $.post("/api/event_participant", event_participant, getEvents);
         } else { alert("Please log in or sign up to join an event!"); }
     }
 
