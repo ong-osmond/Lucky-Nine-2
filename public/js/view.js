@@ -44,6 +44,7 @@ $(document).ready(function() {
             $("#logoutButton").show();
             $("#myEventsButton").show();
             $("#allEventsButton").show();
+            $("#event-form").show();
         }
     }
 

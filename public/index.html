@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>EcoMeetup - Find Eco Events Near You!</title>
+
     <!-- Latest compiled and minified CSS & JS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/lumen/bootstrap.min.css" />
+
+    <!--Local CSS-->
     <link href="stylesheets/style.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -14,8 +17,8 @@
 <body>
 
     <!---Add NAVBAR-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a id="userName" class="navbar-brand" href="#">Hello, Username!</a>
+    <nav class="navbar navbar-expand-lg navbar-ligh bg-transparent">
+        <button id="userName" class="navbar-brand btn btn-primary" href="#">Hello, Username!</button>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -50,6 +53,7 @@
         </div>
     </nav>
 
+
     <!--MODAL SECTION-->
     <section>
 
@@ -76,52 +80,79 @@
     </section>
 
     <!--Search Section-->
-    <section class="search-section">
+    <section class="search-sec">
         <div class="container">
-            <form>
-                <i class="fas fa-search"></i>
-                <input type="search" id="searchTerm" placeholder="Enter city or suburb">
-                <input type="submit" value="Search" id="searchButton" class="btn btn-success">
-                <button type="button" class="btn btn-success" id="myEventsButton" style="display: none;">
-                    My Events
-                </button>
-                <button type="button" class="btn btn-success" id="allEventsButton" style="display: none;">
-                    All Events
-                </button>
+            <form action="#" method="post" novalidate="novalidate">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                <input type="search" id="searchTerm" class="form-control search-slt"
+                                    placeholder="Enter city or suburb">
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                <input type="submit" value="Search" id="searchButton" class="btn btn-danger wrn-btn">
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                <button type="button" class="btn btn-danger wrn-btn" id="myEventsButton"
+                                    style="display: none;">
+                                    My Events
+                                </button>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                <button type="button" class="btn btn-danger wrn-btn" id="allEventsButton"
+                                    style="display: none;">
+                                    All Events
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </section>
 
-    <!--Create Event-->
+    <!--Create Event/Search-->
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <ul class="list-group event-list">
                     <li class="list-group-item new-item">
-                        <form id="event-form">
+                        <form id="event-form" style="display: none;">
                             <div class="container">
+                                <h1>Create Event</h1>
                                 <div class="row">
                                     <div class="col-10">
-                                        <input class="new-event-title form-control" placeholder="Event Title"
-                                            type="text" />
-                                        <input class="new-event-description form-control"
-                                            placeholder="Describe your event" type="text" />
-                                        <input class="new-event-venue form-control"
-                                            placeholder="Venue (please include the city or suburb)" type="text" />
-                                        <select class="new-event-category form-control">
-                                            <option value="">--Please choose a category--</option>
-                                            <option value="Cleanup">Cleanup</option>
-                                            <option value="Recycling">Recycling</option>
-                                            <option value="Tree Planting">Tree Planting</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                        <form action="/action_page.php">
-                                            <label for="new-event-dateTime">Local Date and Time:</label>
+                                        <div class="form-group">
+                                            <label for="new-event-title">Title</label>
+                                            <input id="new-event-title" class="new-event-title form-control"
+                                                placeholder="Event Title" type="text" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="new-event-description">Description</label>
+                                            <input id="new-event-description" class="new-event-description form-control"
+                                                placeholder="Describe your event" type="text" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="new-event-venue">Venue</label>
+                                            <input id="new-event-venue" class="new-event-venue form-control"
+                                                placeholder="Venue (please include the city or suburb)" type="text" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="new-event-category">Category</label>
+                                            <select id="new-event-category" class="new-event-category form-control">
+                                                <option value="">--Please choose a category--</option>
+                                                <option value="Cleanup">Cleanup</option>
+                                                <option value="Recycling">Recycling</option>
+                                                <option value="Tree Planting">Tree Planting</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="new-event-dateTime">Date</label>
                                             <input type="datetime-local" class="new-event-dateTime"
                                                 name="new-event-dateTime">
-                                        </form>
-                                    </div>
-                                    <div class="col-2">
+                                        </div>
                                         <button type="submit" class="btn btn-success">Add Event</button>
                                     </div>
                                 </div>
@@ -161,7 +192,7 @@
                                         <input type="password" class="form-control" id="login-password-input"
                                             placeholder="Password">
                                     </div>
-                                    <button type="submit" class="btn btn-default">Login</button>
+                                    <button id="login" type="submit" class="btn btn-default">Login</button>
                                 </form>
                                 <br />
                             </div>
@@ -191,8 +222,6 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3">
                                 <h2>Signup</h2>
-
-
                                 <form class="signup">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>
@@ -210,18 +239,6 @@
                                     </div>
                                     <button type="submit" class="btn btn-default">Sign Up</button>
                                 </form>
-
-                                <!-- <div class="form-group">
-                                        <label for="exampleInputFirstName">First Name</label>
-                                        <input type="firstName" class="form-control" id="signup-firstName-input"
-                                            placeholder="First Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputLastName">Last Name</label>
-                                        <input type="lastName" class="form-control" id="signup-lastName-input"
-                                            placeholder="Last Name"> 
-                                    </div>    
-                                        -->
                                 <br />
                             </div>
                         </div>
@@ -253,6 +270,7 @@
                 $("#signUpButton").show();
                 $("#logoutButton").hide();
                 $("#userName").hide();
+                $("#event-form").hide();
             })
         })
 
