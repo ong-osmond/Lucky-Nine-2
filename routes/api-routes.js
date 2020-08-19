@@ -1,8 +1,9 @@
 // Requiring our models and passport as we've configured it
 const db = require("../models");
 const passport = require("../config/passport");
-
-
+const { Sequelize } = require("../models");
+const Op = Sequelize.Op;
+const nodemailer = require("nodemailer");
 
 module.exports = function(app) {
     // Using the passport.authenticate middleware with our local strategy.
@@ -42,8 +43,6 @@ module.exports = function(app) {
             // The user is not logged in, send back an empty object
             res.json({});
         } else {
-            // Otherwise send back the user's email and id
-            // Sending back a password, even a hashed password, isn't a good idea
             res.json({
                 email: req.user.email,
                 id: req.user.id
@@ -70,9 +69,10 @@ module.exports = function(app) {
         let eventTable = db.Event;
         eventTable.hasMany(eventParticipantTable, { foreignKey: 'event_id' });
         eventParticipantTable.belongsTo(eventTable, { foreignKey: 'id' });
-        eventTable.findAll({ where: { createdBy: req.params.id }, include: [eventParticipantTable] }).then(function(results) {
-            res.json(results);
-        });
+        eventTable.findAll({ where: { createdBy: req.params.id }, include: [eventParticipantTable] })
+            .then(function(results) {
+                res.json(results);
+            });
     });
 
     // Route for adding event
@@ -102,12 +102,65 @@ module.exports = function(app) {
 
     // Route for adding event_participant
     app.post("/api/event_participant", function(req, res) {
-        db.Event_Participant.create({
-            event_id: req.body.event_id,
-            participant_id: req.body.participant_id
+        console.log(`Organiser id is: ${req.body.event_organiser}`);
+        db.User.findOne({ where: { id: req.body.event_organiser } })
+            .then(function(eventOrganiser) {
+                let email = eventOrganiser.email;
+                console.log(`Send to: ${email}`);
+                sendMail(email);
+                db.Event_Participant.create({
+                        event_id: req.body.event_id,
+                        participant_id: req.body.participant_id
+                    })
+                    .then(function(event) {
+                        res.json(event);
+                    });
+            });
+
+    });
+
+    // Route for finding an event
+    app.get("/api/event/search/:term", function(req, res) {
+        console.log(`Searching for: ${req.params.term}`);
+        let eventParticipantTable = db.Event_Participant;
+        let eventTable = db.Event;
+        eventTable.hasMany(eventParticipantTable, { foreignKey: 'event_id' });
+        eventParticipantTable.belongsTo(eventTable, { foreignKey: 'id' });
+        eventTable.findAll({
+            where: {
+                venue: {
+                    [Op.like]: '%' + req.params.term + '%'
+                }
+            },
+            include: [eventParticipantTable]
         }).then(function(event) {
             res.json(event);
         });
     });
 
+    //Emailer
+    async function sendMail(emailAddress) {
+        console.log(`Email to send to: ${emailAddress}`);
+
+        // create reusable transporter object using the default SMTP transport
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.ethereal.email',
+            port: 587,
+            auth: {
+                user: 'twila34@ethereal.email',
+                pass: 'E5gp7DtPFnqXZ21uCc'
+            }
+        });
+        // send mail with defined transport object
+        let info = await transporter.sendMail({
+            from: '"EcoMeetup Admin" <admin@ecomeetup.com>', // sender address
+            to: emailAddress, // list of receivers
+            subject: "A person joined your event", // Subject line
+            text: "A person joined your event", // plain text body
+            html: "<b>A person joined your event</b>", // html body
+        });
+        console.log("Message sent: %s", info.messageId);
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+    }
 };

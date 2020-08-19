@@ -47,6 +47,7 @@ $(document).ready(() => {
                     $("#userName").text(`Hello, user ID: ${userId}`)
                     $("#userName").show();
                     $("#myEventsButton").show();
+                    $("#allEventsButton").show();
                     $("#loginButton").hide();
                     $("#signUpButton").hide();
                     $("#logoutButton").show();
