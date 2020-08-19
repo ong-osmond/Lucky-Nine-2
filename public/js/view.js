@@ -143,13 +143,15 @@ $(document).ready(function () {
           <br> Number of participants: ${event.Event_Participants.length}
           <br> Created by user id: ${event.createdBy}
           </span>
-          <br> 
+          <br>
+          <p></p> 
           <input type='text' class='edit' style='display: none;'>
           <button class='join btn btn-primary'>Join!</button>
           <button class='delete btn btn-danger'>Delete Event</button>
           </li>`
             ].join("")
         );
+        newInputRow.find("p").data("id", event.id);
         newInputRow.find("button.delete").data("id", event.id);
         newInputRow.find("input.edit").css("display", "none");
         // Check if Delete button is accessible
@@ -179,9 +181,11 @@ $(document).ready(function () {
                     newInputRow.find("button.join").show();
                 } else {
                     newInputRow.find("button.join").hide();
+                    newInputRow.find("p").text("Thank you for joining this event.");
                 }
                 if (userId == event.createdBy || eventParticipants.includes(userId)) {
                     newInputRow.find("button.join").hide();
+                    newInputRow.find("p").text("Thank you for joining this event.");
                 };
             }
         } else {
