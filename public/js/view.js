@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-$(document).ready(function() {
+$(document).ready(function () {
 
     // Getting a reference to the input field where user adds a new event
     var $newEventTitle = $(".new-event-title");
@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     // Callback function to retrieve the current IP
     function getJoinEventID() {
-        $.getJSON("http://jsonip.com/?callback=?", function(data) {
+        $.getJSON("http://jsonip.com/?callback=?", function (data) {
             return data.ip;
         });
     }
@@ -61,9 +61,8 @@ $(document).ready(function() {
 
     // This function grabs events from the database and updates the view
     function getEvents() {
-        $.get("/api/events", function(data) {
+        $.get("/api/events", function (data) {
             events = data;
-            console.log(events);
             initializeRows();
         });
     }
@@ -72,8 +71,8 @@ $(document).ready(function() {
     function getMyEvents() {
         let loggedInData = JSON.parse(localStorage.loggedInData);
         let userId = (loggedInData.user);
-        console.log(`Sending this api route request for myEvents : /api/myEvents/${userId}`);
-        $.get(`/api/myEvents/${userId}`, function(data) {
+        //console.log(`Sending this api route request for myEvents : /api/myEvents/${userId}`);
+        $.get(`/api/myEvents/${userId}`, function (data) {
             events = data;
             initializeRows();
         });
@@ -84,7 +83,7 @@ $(document).ready(function() {
     function deleteEvent(event) {
         event.stopPropagation();
         var id = $(this).data("id");
-        console.log(id);
+        //console.log(id);
         $.ajax({
             method: "DELETE",
             url: "/api/event/" + id
@@ -109,11 +108,11 @@ $(document).ready(function() {
             let userId = (loggedInData.user);
             let eventToJoin = $(this).parent().data("event");
             var event_participant = {
+                event_title: eventToJoin.title,
                 event_id: eventToJoin.id,
                 participant_id: userId,
                 event_organiser: eventToJoin.createdBy
             };
-            console.log(event_participant);
             $.post("/api/event_participant", event_participant, getEvents);
         } else { alert("Please log in or sign up to join an event!"); }
     }
@@ -236,7 +235,6 @@ $(document).ready(function() {
             email: emailInput.val().trim(),
             password: passwordInput.val().trim()
         };
-        console.log(userData);
 
         if (!userData.email || !userData.password) {
             return;
@@ -251,9 +249,9 @@ $(document).ready(function() {
     // Log in the user
     function loginUser(email, password) {
         $.post("/api/login", {
-                email: email,
-                password: password
-            })
+            email: email,
+            password: password
+        })
             .then((userData) => {
                 let loggedInData = { user: userData.id, timestamp: Date.now() };
                 loggedInData = JSON.stringify(loggedInData);
@@ -277,10 +275,10 @@ $(document).ready(function() {
     }
 
     // Log out the user
-    $('#logoutButton').on('click', function() {
+    $('#logoutButton').on('click', function () {
         let userData = {};
         localStorage.clear();
-        $.get("logout", function(data) {
+        $.get("logout", function (data) {
             $("#loginButton").show();
             $("#signUpButton").show();
             $("#logoutButton").hide();
@@ -294,15 +292,20 @@ $(document).ready(function() {
         getEvents();
     })
 
-    $('#searchButton').on('click', function() {
-        console.log("Logout button clicked");
+    // Modal handling
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    })
+
+    // Search button handling
+    $('#searchButton').on('click', function () {
         let term = $("#searchTerm").val();
         searchEvents(term);
     })
 
     function searchEvents(term) {
         event.preventDefault();
-        $.get(`/api/event/search/${term}`, function(data) {
+        $.get(`/api/event/search/${term}`, function (data) {
             events = data;
             initializeRows();
         });

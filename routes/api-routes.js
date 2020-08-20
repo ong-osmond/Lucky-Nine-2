@@ -5,7 +5,7 @@ const { Sequelize } = require("../models");
 const Op = Sequelize.Op;
 const nodemailer = require("nodemailer");
 
-module.exports = function(app) {
+module.exports = function (app) {
     // Using the passport.authenticate middleware with our local strategy.
     // If the user has valid login credentials, send them to the members page.
     // Otherwise the user will be sent an error
@@ -20,9 +20,9 @@ module.exports = function(app) {
     // otherwise send back an error
     app.post("/api/signup", (req, res) => {
         db.User.create({
-                email: req.body.email,
-                password: req.body.password
-            })
+            email: req.body.email,
+            password: req.body.password
+        })
             .then(() => {
                 res.redirect(307, "/api/login");
             })
@@ -51,32 +51,32 @@ module.exports = function(app) {
     });
 
     // Route for getting all events
-    app.get("/api/events", function(req, res) {
+    app.get("/api/events", function (req, res) {
         // Joining Event table to Event_Participant table
         let eventParticipantTable = db.Event_Participant;
         let eventTable = db.Event;
         eventTable.hasMany(eventParticipantTable, { foreignKey: 'event_id' });
         eventParticipantTable.belongsTo(eventTable, { foreignKey: 'id' });
-        eventTable.findAll({ include: [eventParticipantTable] }).then(function(results) {
+        eventTable.findAll({ include: [eventParticipantTable] }).then(function (results) {
             res.json(results);
         });
     });
 
     // Route for getting user's events
-    app.get("/api/myEvents/:id", function(req, res) {
+    app.get("/api/myEvents/:id", function (req, res) {
         // Joining Event table to Event_Participant table
         let eventParticipantTable = db.Event_Participant;
         let eventTable = db.Event;
         eventTable.hasMany(eventParticipantTable, { foreignKey: 'event_id' });
         eventParticipantTable.belongsTo(eventTable, { foreignKey: 'id' });
         eventTable.findAll({ where: { createdBy: req.params.id }, include: [eventParticipantTable] })
-            .then(function(results) {
+            .then(function (results) {
                 res.json(results);
             });
     });
 
     // Route for adding event
-    app.post("/api/event", function(req, res) {
+    app.post("/api/event", function (req, res) {
         db.Event.create({
             title: req.body.title,
             description: req.body.description,
@@ -84,35 +84,35 @@ module.exports = function(app) {
             venue: req.body.venue,
             dateTime: req.body.dateTime,
             createdBy: req.body.createdBy
-        }).then(function(event) {
+        }).then(function (event) {
             res.json(event);
         });
     });
 
     //Route for deleting event
-    app.delete("/api/event/:id", function(req, res) {
+    app.delete("/api/event/:id", function (req, res) {
         db.Event.destroy({
             where: {
                 id: req.params.id
             }
-        }).then(function(event) {
+        }).then(function (event) {
             res.json(event);
         });
     });
 
     // Route for adding event_participant
-    app.post("/api/event_participant", function(req, res) {
-        console.log(`Organiser id is: ${req.body.event_organiser}`);
+    app.post("/api/event_participant", function (req, res) {
         db.User.findOne({ where: { id: req.body.event_organiser } })
-            .then(function(eventOrganiser) {
+            .then(function (eventOrganiser) {
                 let email = eventOrganiser.email;
+                let eventTitle = req.body.event_title;
                 console.log(`Send to: ${email}`);
-                sendMail(email);
+                sendMail(email, eventTitle);
                 db.Event_Participant.create({
-                        event_id: req.body.event_id,
-                        participant_id: req.body.participant_id
-                    })
-                    .then(function(event) {
+                    event_id: req.body.event_id,
+                    participant_id: req.body.participant_id
+                })
+                    .then(function (event) {
                         res.json(event);
                     });
             });
@@ -120,7 +120,7 @@ module.exports = function(app) {
     });
 
     // Route for finding an event
-    app.get("/api/event/search/:term", function(req, res) {
+    app.get("/api/event/search/:term", function (req, res) {
         console.log(`Searching for: ${req.params.term}`);
         let eventParticipantTable = db.Event_Participant;
         let eventTable = db.Event;
@@ -133,31 +133,30 @@ module.exports = function(app) {
                 }
             },
             include: [eventParticipantTable]
-        }).then(function(event) {
+        }).then(function (event) {
             res.json(event);
         });
     });
 
     //Emailer
-    async function sendMail(emailAddress) {
-        console.log(`Email to send to: ${emailAddress}`);
-
+    async function sendMail(emailAddress, eventTitle) {
+        console.log(`Email Address to send to: ${emailAddress}`);
         // create reusable transporter object using the default SMTP transport
         const transporter = nodemailer.createTransport({
-            host: 'smtp.ethereal.email',
-            port: 587,
+            service: 'Gmail', // host:'smtp.ethereal.email',
+            //port: 587,
             auth: {
-                user: 'twila34@ethereal.email',
-                pass: 'E5gp7DtPFnqXZ21uCc'
+                user: 'lucky9bootcamp@gmail.com',//'twila34@ethereal.email',
+                pass: 'Today001'//'E5gp7DtPFnqXZ21uCc'
             }
         });
         // send mail with defined transport object
         let info = await transporter.sendMail({
             from: '"EcoMeetup Admin" <admin@ecomeetup.com>', // sender address
             to: emailAddress, // list of receivers
-            subject: "A person joined your event", // Subject line
-            text: "A person joined your event", // plain text body
-            html: "<b>A person joined your event</b>", // html body
+            subject: `A person joined your event titled ${eventTitle}`, // Subject line
+            text: `Congratulations! A person just joined your event titled ${eventTitle} `, // plain text body
+            html: `<b> Congratulations! A person just joined your event titled ${eventTitle} `, // html body
         });
         console.log("Message sent: %s", info.messageId);
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));

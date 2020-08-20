@@ -4,7 +4,12 @@
     "password": "root",
     "database": "eco_meetup",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "service": "Gmail",
+    "auth": {
+      "user": "lucky9bootcamp@gmail.com", 
+      "pass": "Today001" 
+  }
   },
   "test": {
     "username": "root",

@@ -64,6 +64,10 @@ body {
   text-align:center;
 }
 
+.nav-link:hover {
+  color: white;
+}
+
 .nav-item {
   margin-left: 5%;
 }
