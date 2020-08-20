@@ -51,6 +51,8 @@ $(document).ready(() => {
                     $("#loginButton").hide();
                     $("#signUpButton").hide();
                     $("#logoutButton").show();
+                    $("#addEventButton").show();
+                    $("#ecoMeetupHero").hide();
                 })
             })
     }

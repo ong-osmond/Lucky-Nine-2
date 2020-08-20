@@ -1,6 +1,7 @@
 /*search box css start here*/
 body {
-  background-color:black;
+  background-color: #158CBA;
+  padding-top: 50px;
 }
 .search-sec{
   padding: 2rem;

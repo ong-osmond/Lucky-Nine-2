@@ -17,7 +17,7 @@ $(document).ready(function() {
     //$(document).on("click", ".event-item", editEvent);
     //$(document).on("keyup", ".event-item", finishEdit);
     //$(document).on("blur", ".event-item", cancelEdit);
-    $(document).on("submit", "#event-form", insertEvent);
+    $(document).on("submit", "#event-form", addEvent);
 
     // Callback function to retrieve the current IP
     function getJoinEventID() {
@@ -44,7 +44,8 @@ $(document).ready(function() {
             $("#logoutButton").show();
             $("#myEventsButton").show();
             $("#allEventsButton").show();
-            $("#event-form").show();
+            $("#addEventButton").show();
+            $("#ecoMeetupHero").hide();
         }
     }
 
@@ -136,9 +137,9 @@ $(document).ready(function() {
         var localEventDateTime = formatAMPM(event.dateTime);
         var newInputRow = $(
             [
-                `<li class='list-group-item event-item'>
+                `<div class="card" style="width: 90%; margin-left: 65px; margin-top: 20px">
           <span>
-          <b> ${event.title} </b>
+          <h1 class="card-title">${event.title}</h1>
           <br> ${event.description}
           <br> Venue: ${event.venue}
           <br> Local Date and Time: ${localEventDateTime}
@@ -149,9 +150,9 @@ $(document).ready(function() {
           <br>
           <p></p> 
           <input type='text' class='edit' style='display: none;'>
-          <button class='join btn btn-primary'>Join!</button>
+          <button class='join btn btn-success'>Join!</button>
           <button class='delete btn btn-danger'>Delete Event</button>
-          </li>`
+          </div>`
             ].join("")
         );
         newInputRow.find("p").data("id", event.id);
@@ -202,7 +203,7 @@ $(document).ready(function() {
     }
 
     // This function inserts a new event into our database and then updates the view
-    function insertEvent(event) {
+    function addEvent(event) {
         event.preventDefault();
         // Retrieve the credentials of the user
         if (localStorage.loggedInData) {
@@ -216,7 +217,7 @@ $(document).ready(function() {
                 dateTime: $newEventDateTime.val(),
                 createdBy: userId
             };
-            $.post("/api/event", event, getMyEvents);
+            $.post("/api/event", event, getMyEvents).then($("#addEventModal").modal('hide'));
         } else { alert("Please log in or sign up to add an event!"); }
     }
 
@@ -269,6 +270,8 @@ $(document).ready(function() {
                 $("#loginButton").hide();
                 $("#signUpButton").hide();
                 $("#logoutButton").show();
+                $("#addEventButton").show();
+                $("#ecoMeetupHero").hide();
                 getMyEvents();
             })
     }
@@ -284,6 +287,9 @@ $(document).ready(function() {
             $("#userName").hide();
             $("#myEventsButton").hide();
             $("#allEventsButton").hide();
+            $("#addEventButton").hide();
+            $("#ecoMeetupHero").show();
+            $("#userName").show().text("Please log in or sign up to add or join an event");
         });
         getEvents();
     })
