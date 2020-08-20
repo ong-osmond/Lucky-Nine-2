@@ -58,7 +58,10 @@
     <section id="ecoMeetupHero" class="page-section text-white mb-0">
         <!--Title-->
         <h1 id="maintitle">EcoMeetup</h1>
-        <h3 id="mainblurb">Discover environmental events near you</h3>
+        <br>
+        <br>
+        <h3 id="mainblurb"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+                href="#searchSection">Discover environmental events near you >></a></h3>
         <!--Main carousel-->
         <div id="ecoMeetupCarousel" class="carousel slide carousel-fade" data-ride="carousel">
             <div class="carousel-inner">
@@ -134,7 +137,6 @@
                 <div class="modal-body">
                     <form id="event-form">
                         <div class="container">
-                            <h1>Add an Event</h1>
                             <div class="row">
                                 <div class="col-10">
                                     <div class="form-group">
@@ -194,7 +196,6 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3">
-                                <h2>Login</h2>
                                 <form class="login">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>
@@ -234,7 +235,6 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3">
-                                <h2>Signup</h2>
                                 <form class="signup">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>
@@ -266,27 +266,7 @@
 
     <!-- Custom Script -->
     <script src="js/view.js" type="text/javascript"></script>
-    <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript" src="js/signup.js"></script>
-    <script>
-        $('#myModal').on('shown.bs.modal', function () {
-            $('#myInput').trigger('focus')
-        })
-        $('#logoutButton').on('click', function () {
-            console.log("Logout button clicked");
-            $.get("logout", function (data) {
-                let userData = {};
-                localStorage.clear();
-                $("#loginButton").show();
-                $("#signUpButton").show();
-                $("#logoutButton").hide();
-                $("#userName").hide();
-                $("#event-form").hide();
-            })
-        })
-
-    </script>
-
 
 </body>
 
