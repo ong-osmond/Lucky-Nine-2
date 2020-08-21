@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 
+//creating the database with sequelize
 module.exports = function(sequelize, DataTypes) {
     const Event = sequelize.define("Event", {
         title: {
