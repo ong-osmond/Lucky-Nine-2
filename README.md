@@ -1,6 +1,6 @@
 # Project 2 
 
-## ECO-MEETUP developed by team Lucky-nine, participants are, DHANYA, JOHN, OSMOND
+## ECO-MEETUP developed by team Lucky-nine DHANYA, JOHN and OSMOND
 
 
 ## Application Requirements
@@ -32,7 +32,7 @@
 
  `This our google document presentation`
  
- [HERE IS OUR GOOGLE PRESENTATION SLDES, CLICK HERE TO EXPLORE](https://docs.google.com/presentation/d/1juYB1fS56DXrwaUWAubWvVeix7aVV6PU5ffOznzxWDU/edit?usp=sharing)at 
+ [HERE IS OUR GOOGLE PRESENTATION SLDES, CLICK HERE TO EXPLORE] (https://docs.google.com/presentation/d/1juYB1fS56DXrwaUWAubWvVeix7aVV6PU5ffOznzxWDU/edit?usp=sharing) 
  
  # This presentation addresses the following requirements
 
@@ -67,4 +67,4 @@ These are the links to our application:
 * https://murmuring-bayou-85480.herokuapp.com    [ Heroku link]
 
 
-* https://github.com/Dhanya-krishnan2/Lucky-Nine-2  [ github]
+*https://github.com/ong-osmond/Lucky-Nine-2 [ github]
